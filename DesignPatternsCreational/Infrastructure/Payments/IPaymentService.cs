@@ -5,5 +5,6 @@ namespace DesignPatternsCreational.Infrastructure.Payments
     public interface IPaymentService
     {
         object Process(OrderInputModel model);
+        object ProcessAdapter(OrderInputModel model);
     }
 }

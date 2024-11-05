@@ -8,5 +8,10 @@ namespace DesignPatternsCreational.Infrastructure.Payments
         {
             return "Transação aprovada";
         }
+
+        public object ProcessAdapter(OrderInputModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
