@@ -1,4 +1,5 @@
-﻿using DesignPatternsCreational.Application.Models;
+﻿using DesignPatternsCreational.Application.Configurations;
+using DesignPatternsCreational.Application.Models;
 using DesignPatternsCreational.Infrastructure;
 using DesignPatternsCreational.Infrastructure.Payments;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,12 @@ namespace DesignPatternsCreational.Controllers
             var customerCopyData = (customerCopy as CustomerInputModel).ReturnDataAsString();
 
             return Ok(new { customerData, customerCopyData });
+        }
+
+        [HttpPost("Singleton")]
+        public IActionResult Singleton()
+        {
+            return Ok(BusinessHours.GetInstance());
         }
     }
 }
