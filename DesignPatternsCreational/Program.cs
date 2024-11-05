@@ -1,6 +1,7 @@
 using DesignPatternsCreational.Infrastructure;
 using DesignPatternsCreational.Infrastructure.Deliveries;
 using DesignPatternsCreational.Infrastructure.Payments;
+using DesignPatternsCreational.Infrastructure.Payments.Decorators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +16,15 @@ builder.Services.AddScoped<IPaymentService, CreditCardService>();
 builder.Services.AddScoped<IPaymentService, PaymentSlipService>();
 builder.Services.AddScoped<IDeliveryService, NationalDeliveryService>();
 builder.Services.AddScoped<IDeliveryService, InternationalDeliveryService>();
+builder.Services.AddScoped<ExternalPaymentSlipService>();
+builder.Services.AddScoped<IExternalPaymentSlipService, ExternalPaymentSlipServiceDecorator>();
+builder.Services.AddScoped<IPaymentService, PaymentServiceDecorator>();
 
 builder.Services.AddSingleton<IPaymentServiceFactory, PaymentServiceFactory>();
 builder.Services.AddSingleton<IOrderAbstractFactory, InternationalOrderAbstractFactory>();
 builder.Services.AddSingleton<IOrderAbstractFactory, NationalOrderAbstractFactory>();
+
+
 
 var app = builder.Build();
 

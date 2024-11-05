@@ -1,4 +1,6 @@
 ﻿using DesignPatternsCreational.Core.Enums;
+using DesignPatternsCreational.Infrastructure.Integrations;
+using DesignPatternsCreational.Infrastructure.Payments.Decorators;
 
 namespace DesignPatternsCreational.Infrastructure.Payments
 {
@@ -6,11 +8,13 @@ namespace DesignPatternsCreational.Infrastructure.Payments
     {
         private readonly CreditCardService _creditCardService;
         private readonly PaymentSlipService _paymentSlipService;
+        private readonly ICoreCrmIntegrationService _crmService;
 
-        public PaymentServiceFactory(CreditCardService creditCardService,PaymentSlipService paymentSlipService)
+        public PaymentServiceFactory(CreditCardService creditCardService,PaymentSlipService paymentSlipService, ICoreCrmIntegrationService crmService)
         {
             _creditCardService = creditCardService;
             _paymentSlipService = paymentSlipService;
+            _crmService = crmService;
         }
 
         public IPaymentService GetService(PaymentMethod paymentMethod)
@@ -31,7 +35,7 @@ namespace DesignPatternsCreational.Infrastructure.Payments
                     throw new InvalidOperationException();
             }
 
-            return paymentService;
+            return new PaymentServiceDecorator(paymentService, _crmService);
         }
     }
 }
