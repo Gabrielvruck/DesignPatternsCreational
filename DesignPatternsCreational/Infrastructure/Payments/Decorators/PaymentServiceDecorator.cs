@@ -7,17 +7,23 @@ namespace DesignPatternsCreational.Infrastructure.Payments.Decorators
     {
         private IPaymentService _paymentService;
         private readonly ICoreCrmIntegrationService _crmService;
-
-        public PaymentServiceDecorator(IPaymentService paymentService, ICoreCrmIntegrationService crmService)
+        private readonly IAntiFraudFacade _antiFraudFacade;
+        public PaymentServiceDecorator(IPaymentService paymentService, ICoreCrmIntegrationService crmService, IAntiFraudFacade antiFraudFacade)
         {
             _paymentService = paymentService;
             _crmService = crmService;
+            _antiFraudFacade = antiFraudFacade;
         }
 
         public object Process(OrderInputModel model)
         {
-            var result = _paymentService.Process(model);
+            var antiFraudModel = new AntiFraudModel(model.Customer.Document, model.TotalPrice);
+            var antiFraudResult = _antiFraudFacade.Check(antiFraudModel);
 
+            if (antiFraudResult == null || antiFraudResult.CheckResult)
+                throw new InvalidOperationException(antiFraudResult?.Comments);
+
+            var result = _paymentService.Process(model);
             _crmService.Sync(model);
 
             return result;
