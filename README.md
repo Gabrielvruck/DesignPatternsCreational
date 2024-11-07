@@ -4,3 +4,13 @@ O que são Design Patterns de tipo Creational
 * Builder
 * Prototype
 * Singleton
+  
+Design Patterns - Structural
+* Adapter
+* Decorator
+* Facade
+* Proxy
+* Composite
+* Bridge
+* Flyweight
+* 
