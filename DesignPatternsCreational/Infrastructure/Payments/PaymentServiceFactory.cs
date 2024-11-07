@@ -9,12 +9,13 @@ namespace DesignPatternsCreational.Infrastructure.Payments
         private readonly CreditCardService _creditCardService;
         private readonly PaymentSlipService _paymentSlipService;
         private readonly ICoreCrmIntegrationService _crmService;
-
-        public PaymentServiceFactory(CreditCardService creditCardService,PaymentSlipService paymentSlipService, ICoreCrmIntegrationService crmService)
+        private readonly IAntiFraudFacade _antiFraudFacade;
+        public PaymentServiceFactory(CreditCardService creditCardService,PaymentSlipService paymentSlipService, ICoreCrmIntegrationService crmService, IAntiFraudFacade antiFraudFacade)
         {
             _creditCardService = creditCardService;
             _paymentSlipService = paymentSlipService;
             _crmService = crmService;
+            _antiFraudFacade = antiFraudFacade;
         }
 
         public IPaymentService GetService(PaymentMethod paymentMethod)
@@ -35,7 +36,7 @@ namespace DesignPatternsCreational.Infrastructure.Payments
                     throw new InvalidOperationException();
             }
 
-            return new PaymentServiceDecorator(paymentService, _crmService);
+            return new PaymentServiceDecorator(paymentService, _crmService, _antiFraudFacade);
         }
     }
 }
